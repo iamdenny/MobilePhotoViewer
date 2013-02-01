@@ -15,8 +15,9 @@ Gracias.
 ## How to use
 
 ### Case 1 : just html file
+
 mobile-photo-viewer.html
-'''html
+```html
 	<div id="_mpv">
 	</div>
 	<script type="text/javascript" charset="utf-8" src="./js/jindo.m.PhotoViewer.js"></script>
@@ -25,11 +26,12 @@ mobile-photo-viewer.html
 
 		});
 	</script>
-'''
+```
 
 ### Case 2 : html file with Ajax
+
 mobile-photo-viewer.html
-'''html
+```html
 	<div id="_mpv">
 	</div>
 	<script type="text/javascript" charset="utf-8" src="./js/jindo.m.PhotoViewer.js"></script>
@@ -38,4 +40,4 @@ mobile-photo-viewer.html
 
 		});
 	</script>
-'''
+```
