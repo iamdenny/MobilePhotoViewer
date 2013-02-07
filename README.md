@@ -70,11 +70,3 @@ mobile-photo-viewer.html
 	});
 </script>
 ```
-
-## Test
-
-### Qunit
-
-### JSLint
-
-### JSCat
