@@ -36,16 +36,16 @@ if you want big scale of scroll, include below js file
 
 Choose a js file that you want for flicking, normally jindo.m.SlideFlicking.js is fine.
 ```html
-<script type="text/javascript" charset="utf-8" src="./lib/flicing/jindo.m.AlignFlipFlicking.js"></script>
-<script type="text/javascript" charset="utf-8" src="./lib/flicing/jindo.m.CoverFlicking.js"></script>
-<script type="text/javascript" charset="utf-8" src="./lib/flicing/jindo.m.FlickingAnimation.js"></script>
-<script type="text/javascript" charset="utf-8" src="./lib/flicing/jindo.m.FlipFlicking.js"></script>
-<script type="text/javascript" charset="utf-8" src="./lib/flicing/jindo.m.SlideFlicking.js"></script>
+<script type="text/javascript" charset="utf-8" src="./lib/flicking/jindo.m.AlignFlipFlicking.js"></script>
+<script type="text/javascript" charset="utf-8" src="./lib/flicking/jindo.m.CoverFlicking.js"></script>
+<script type="text/javascript" charset="utf-8" src="./lib/flicking/jindo.m.FlickingAnimation.js"></script>
+<script type="text/javascript" charset="utf-8" src="./lib/flicking/jindo.m.FlipFlicking.js"></script>
+<script type="text/javascript" charset="utf-8" src="./lib/flicking/jindo.m.SlideFlicking.js"></script>
 ```
 
-### Case 1 : just html file
+### Example 1 : just html file
 
-mobile-photo-viewer.html
+example001.html
 ```html
 <div id="_mpv">
 </div>
@@ -57,9 +57,9 @@ mobile-photo-viewer.html
 </script>
 ```
 
-### Case 2 : html file with Ajax
+### Example 2 : html file with Ajax
 
-mobile-photo-viewer.html
+example002.html
 ```html
 <div id="_mpv">
 </div>
