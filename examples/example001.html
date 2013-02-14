@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ko" xml:lang="ko">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=880" />
+<title>Example 001</title>
+<link rel="stylesheet" type="text/css" href="../css/jindo.m.PhotoViewer.css" />
+<script type="text/javascript" charset="utf-8" src="../lib/jindo.mobile.min.ns.js"></script>
+<script type="text/javascript" charset="utf-8" src="../lib/jindo.m.js"></script>
+<script type="text/javascript" charset="utf-8" src="../lib/jindo.m.Component.js"></script>
+<script type="text/javascript" charset="utf-8" src="../lib/jindo.m.UIComponent.js"></script>
+<script type="text/javascript" charset="utf-8" src="../lib/jindo.m.Touch.js"></script>
+<script type="text/javascript" charset="utf-8" src="../lib/jindo.m.Scroll.js"></script>
+<script type="text/javascript" charset="utf-8" src="../lib/jindo.m.Flicking.js"></script>
+<script type="text/javascript" charset="utf-8" src="../lib/flicking/jindo.m.FlickingAnimation.js"></script>
+<script type="text/javascript" charset="utf-8" src="../lib/flicking/jindo.m.SlideFlicking.js"></script>
+</head>
+<body>
+	<div id="_mpv">
+	</div>
+	<script type="text/javascript" charset="utf-8" src="../src/jindo.m.PhotoViewer.js"></script>
+	<script type="text/javascript">
+		var htData = {"1":{"sDesc":"","sImg":"http://m.imgauto.naver.com/20130124_136/auto_1359005009720uUTS7_JPEG/20130124142327_qXGqICN5.jpg?type=w600","sLink":"m.auto.naver.com/car/main.nhn?yearsId=28751","sThumb":"http://m.imgauto.naver.com/20130124_136/auto_1359005009720uUTS7_JPEG/20130124142327_qXGqICN5.jpg?type=f70_50","sTitie":""},"2":{"sDesc":"","sImg":"http://m.imgauto.naver.com/20130124_205/auto_1359005010663BV3ie_JPEG/20130124142328_kikinmzl.jpg?type=w600","sLink":"m.auto.naver.com/car/main.nhn?yearsId=28751","sThumb":"http://m.imgauto.naver.com/20130124_205/auto_1359005010663BV3ie_JPEG/20130124142328_kikinmzl.jpg?type=f70_50","sTitie":""},"3":{"sDesc":"","sImg":"http://m.imgauto.naver.com/20130205_161/auto_1360033303115rj39s_JPEG/20130205120130_TwRYFQf1.jpg?type=w600","sLink":"m.auto.naver.com/car/main.nhn?yearsId=28751","sThumb":"http://m.imgauto.naver.com/20130205_161/auto_1360033303115rj39s_JPEG/20130205120130_TwRYFQf1.jpg?type=f70_50","sTitie":""}};
+		var woMpv = new jindo.m.PhotoViewer({
+			sViewerId : '_mpv',
+			nMaxThumbCount : 145,
+			htThumbSize : { nWidth : 70, nHeight: 50 },
+			sAjaxUrl : 'http://m.auto.naver.com/api/car/yearsCarImg.nhn',
+			htAjaxParam : { yearsId : 28751 },
+			htData : htData
+		});
+	</script>
+</body>
+</html>

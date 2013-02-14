@@ -1,0 +1,6 @@
+.mpv_viewer { }
+.mpv_viewer .mpv_thumb { }
+.mpv_viewer .mpv_thumb .container {}
+.mpv_viewer .mpv_thumb ul { margin: 0; padding: 0; list-style: none }
+.mpv_viewer .mpv_thumb li { margin: 0; padding: 0; list-style: none; display: list-item; text-align: -webkit-match-parent; float: left; width: 70px; height: 50px;} 
+.mpv_viewer .mpv_thumb li.on {}

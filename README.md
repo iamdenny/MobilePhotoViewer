@@ -1,6 +1,6 @@
 # Mobile Photo Viewer
 
-It's photo viewer for mobile like smart phone. it has scrolled thumbnail and lazy loading also provide full screen mode. 
+It's photo viewer for mobile like smart phone. It has scrolled thumbnail and lazy loading also provide full screen mode. 
 Gracias.
 
 ## Dependencies
@@ -15,6 +15,19 @@ Gracias.
 ## Mobile Supported Plaforms
 * iOS : 3.0, 4.3.3, 5.0, 6.0
 * Android : 2.2, 2.3, 3.1, 4.0
+
+## Data Protocol
+```json
+{
+	"0" : {
+			"sThumb" : "",
+			"sImg" : ""
+		},
+	"1" : {
+
+		},
+}
+```
 
 ## How to use
 
@@ -49,10 +62,10 @@ example001.html
 ```html
 <div id="_mpv">
 </div>
-<script type="text/javascript" charset="utf-8" src="./js/jindo.m.PhotoViewer.js"></script>
+<script type="text/javascript" charset="utf-8" src="./src/jindo.m.PhotoViewer.js"></script>
 <script type="text/javascript">
 	var woMpv = new jindo.m.PhotoViewer({
-
+		sId : '_mpv'
 	});
 </script>
 ```
@@ -63,7 +76,7 @@ example002.html
 ```html
 <div id="_mpv">
 </div>
-<script type="text/javascript" charset="utf-8" src="./js/jindo.m.PhotoViewer.js"></script>
+<script type="text/javascript" charset="utf-8" src="./src/jindo.m.PhotoViewer.js"></script>
 <script type="text/javascript">
 	var woMpv = new jindo.m.PhotoViewer({
 
