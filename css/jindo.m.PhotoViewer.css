@@ -1,6 +1,25 @@
-.mpv_viewer { }
-.mpv_viewer .mpv_thumb { }
+html { height: 100%;}
+body { margin: 0; padding: 0; background:black; height: 100%;}
+
+.mpv_viewer { height: 100%; }
+
+.mpv_viewer .mpv_title { position:fixed; width: 100%; height: 36px; z-index: 50}
+.mpv_viewer .mpv_title .mpv_title_box { display: block; overflow: hidden; position: relative; background: rgba(0,0,0,.5)}
+.mpv_viewer .mpv_title .mpv_title_box a { display: block; overflow: hidden; padding-left:12px; padding-right:98px; color:#fff; white-space: nowrap; text-overflow: ellipsis; font-weight: bold; font-size: 14px; line-height: 36px; text-decoration: none;}
+.mpv_viewer .mpv_title strong { color: #0e8ee9;}
+.mpv_viewer .mpv_title .mpv_paging { position: fixed; top: 0; right: 44px; font-size: 12px; color: #fff; line-height: 36px; }
+.mpv_viewer .mpv_title .mpv_btn_exit { display: block; overflow: hidden; position:fixed; top: 0; right: 0; width:36px; height: 36px; background:url(../images/sp_multi.png) no-repeat; background-position: -70px -59px; line-height: 1px; color:transparent;-webkit-background-size: 108px 113px; background-size: 108px 113px;}
+
+.mpv_viewer .mpv_thumb { position:fixed; top: 37px; width: 100%; z-index: 50}
 .mpv_viewer .mpv_thumb .container {}
 .mpv_viewer .mpv_thumb ul { margin: 0; padding: 0; list-style: none }
 .mpv_viewer .mpv_thumb li { margin: 0; padding: 0; list-style: none; display: list-item; text-align: -webkit-match-parent; float: left; width: 70px; height: 50px;} 
-.mpv_viewer .mpv_thumb li.on {}
+.mpv_viewer .mpv_thumb li.on {position:relative}
+.mpv_viewer .mpv_thumb li.on:after{position:absolute;top:0;right:0;bottom:0;left:0;z-index:50;border:2px solid #0e8ee9;content:''}
+.mpv_viewer .mpv_thumb li.empty {position:relative}
+.mpv_viewer .mpv_thumb li.empty:after{position:absolute;top:0;right:0;bottom:0;left:0;z-index:50;border:1px solid #8b8b8b;content:''}
+
+.mpv_viewer .mpv_photo { height: 100%; z-index: 1;} 
+.mpv_viewer .mpv_photo .flick-container { height: 100%;} 
+.mpv_viewer .mpv_photo .flick-ct { display: -webkit-box;  display:box; text-align: center;vertical-align: middle;-webkit-box-orient: vertical; -webkit-box-align: center; -webkit-box-pack: center}
+.mpv_viewer .mpv_photo img { vertical-align: middle; }

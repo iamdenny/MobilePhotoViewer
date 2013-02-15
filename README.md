@@ -40,6 +40,7 @@ Common js files you need to include. The current version of Jindo is 2.5.0 and J
 <script type="text/javascript" charset="utf-8" src="./lib/jindo.m.Touch.js"></script>
 <script type="text/javascript" charset="utf-8" src="./lib/jindo.m.Scroll.js"></script>
 <script type="text/javascript" charset="utf-8" src="./lib/jindo.m.Flicking.js"></script>
+<script type="text/javascript" charset="utf-8" src="./lib/flicking/jindo.m.FlickingAnimation.js"></script>
 ```
 
 if you want big scale of scroll, include below js file
@@ -51,7 +52,6 @@ Choose a js file that you want for flicking, normally jindo.m.SlideFlicking.js i
 ```html
 <script type="text/javascript" charset="utf-8" src="./lib/flicking/jindo.m.AlignFlipFlicking.js"></script>
 <script type="text/javascript" charset="utf-8" src="./lib/flicking/jindo.m.CoverFlicking.js"></script>
-<script type="text/javascript" charset="utf-8" src="./lib/flicking/jindo.m.FlickingAnimation.js"></script>
 <script type="text/javascript" charset="utf-8" src="./lib/flicking/jindo.m.FlipFlicking.js"></script>
 <script type="text/javascript" charset="utf-8" src="./lib/flicking/jindo.m.SlideFlicking.js"></script>
 ```

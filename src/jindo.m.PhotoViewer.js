@@ -21,10 +21,11 @@ jindo.m.PhotoViewer = jindo.$Class({
 	$init : function(htOption) {
 		this.option({
 			sViewerId : '',
-			nMaxThumbCount : 0,
+			sCurrentPageId : '',
+			bUseTitleAndPaging : true,
+			nMaxImageCount : 0,
 			htThumbSize : { nWidth : 0, nHeight : 0 },
-			nPreLoadDataLeft : 5,
-			nPreLoadDataRight : 20,
+			nPreLoadDataLeftRight : 5,
 			htPhotoSize : { nWidth : 0, nHeight : 0 },
 			sAjaxUrl : '',
 			htAjaxParam : '',
@@ -32,7 +33,7 @@ jindo.m.PhotoViewer = jindo.$Class({
 			nStartIndex : 1,
 			sEmptyTemplate : '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH/C1hNUCBEYXRhWE1QPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS4wLWMwNjEgNjQuMTQwOTQ5LCAyMDEwLzEyLzA3LTEwOjU3OjAxICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIiB4bWxuczpzdFJlZj0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlUmVmIyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1LjEgTWFjaW50b3NoIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjI3NTM5NkVENjBBQjExRTJCRkI1OEY5MkIzMEJDRkZFIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjI3NTM5NkVFNjBBQjExRTJCRkI1OEY5MkIzMEJDRkZFIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6Mjc1Mzk2RUI2MEFCMTFFMkJGQjU4RjkyQjMwQkNGRkUiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6Mjc1Mzk2RUM2MEFCMTFFMkJGQjU4RjkyQjMwQkNGRkUiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz4B//79/Pv6+fj39vX08/Lx8O/u7ezr6uno5+bl5OPi4eDf3t3c29rZ2NfW1dTT0tHQz87NzMvKycjHxsXEw8LBwL++vby7urm4t7a1tLOysbCvrq2sq6qpqKempaSjoqGgn56dnJuamZiXlpWUk5KRkI+OjYyLiomIh4aFhIOCgYB/fn18e3p5eHd2dXRzcnFwb25tbGtqaWhnZmVkY2JhYF9eXVxbWllYV1ZVVFNSUVBPTk1MS0pJSEdGRURDQkFAPz49PDs6OTg3NjU0MzIxMC8uLSwrKikoJyYlJCMiISAfHh0cGxoZGBcWFRQTEhEQDw4NDAsKCQgHBgUEAwIBAAAh+QQBAAAAACwAAAAAAQABAAACAkQBADs=" alt="" width="{=nWidth}" height="{=nHeight}">',
 			sThumbTemplate : '<img src="{=sThumb}" alt="{=sTitie}">',
-			sThumbLoadingTemplate : '<img src="../images/thumb-loading.gif" alt="">',
+			sThumbLoadingTemplate : '<img src="../images/thumb-loading.gif" alt="" style="padding-top:15px;padding-left:27px;">',
 			sPhotoTemplate : '<img src="{=sImg}" alt="{=sTitle}">',
 			sPhotoLoadingTemplate : '<img src="../images/photo-loading.gif" alt="">',
 			sPrefix : 'mpv_',
@@ -44,6 +45,14 @@ jindo.m.PhotoViewer = jindo.$Class({
 			    bAutoResize : true,
 			    nDeceleration : 0.0005,
 			    nHeight : 10 			
+			},
+			htPhotoOption : {
+				bHorizontal : true,
+				nDuration : 100,
+				sAnimation :'slide',
+				bAutoResize : true,
+				bUseCircular : true,
+				bUseCss3d : false
 			}
 		});
 		this.option(htOption);
@@ -55,37 +64,50 @@ jindo.m.PhotoViewer = jindo.$Class({
 	},
 
 	_initVariables : function(){
+
+		// common
 		this._welViewer = jindo.$Element(this.option('sViewerId')).addClass(this.option('sPrefix')+'viewer');
+		this._welCurrentPage = jindo.$Element(this.option('sCurrentPageId'));
+		this._welTotalPage = jindo.$Element(this.option('sTotalPageId'));
+		this._welTotalPage.text(this.option('nMaxImageCount'));
+
+		// templates
 		this._woEmptyTemplate = jindo.$Template(this.option('sEmptyTemplate'));
 		this._woThumbTemplate = jindo.$Template(this.option('sThumbTemplate'));
 		this._woThumbLoadingTemplate = jindo.$Template(this.option('sThumbLoadingTemplate'));
 		this._woPhotoTemplate = jindo.$Template(this.option('sPhotoTemplate'));
 		this._woPhotoLoadingTemplate = jindo.$Template(this.option('sPhotoLoadingTemplate'));
 
+		// thumbnail with scroll
 		this._welThumb = jindo.$Element('<div>').addClass(this.option('sPrefix')+'thumb');
 		this._welThumbContainer = jindo.$Element('<div>').addClass(this.option('sPrefix')+'container');
 		this._welThumbContainer.appendHTML('<ul>');
 		this._welThumb.append(this._welThumbContainer);
 		this._welViewer.append(this._welThumb);
+		this._woThumb = null;	
 
-		this._woThumb = null;
-		this._fillEmptyThumbs();
-		this._resizeThumb();
-
-		
+		// photo with flicking
+		this._welPhoto = jindo.$Element('<div>').addClass(this.option('sPrefix')+'photo');
+		this._welPhotoContainer = jindo.$Element('<div>').addClass('flick-container');
+		for(var i=0; i<3; i++){
+			this._welPhotoContainer.appendHTML('<div class="flick-ct"></div>');
+		}
+		this._welPhoto.append(this._welPhotoContainer);
+		this._welViewer.append(this._welPhoto);
+		this._woPhoto = null;		
 	},
 
 	_fillEmptyThumbs : function(){
 		var welUl = this._welThumb.query('ul'),
 			htData = this.option('htData'),
 			htThumbSize = this.option('htThumbSize'),
-			nLen = parseInt(this.option('nMaxThumbCount'), 10);
+			nLen = parseInt(this.option('nMaxImageCount'), 10);
 		for(var i=0; i<nLen; i++){
 			var sHtml;
 			if(htData[i+1]){
 				sHtml = '<li>' + this._woThumbTemplate.process(htData[i+1]) + '</li>';
 			}else{
-				sHtml = '<li>' + this._woEmptyTemplate.process(htThumbSize) + '</li>';
+				sHtml = '<li class="empty">' + this._woEmptyTemplate.process(htThumbSize) + '</li>';
 			}
 			var welHtml = jindo.$Element(sHtml);
 			welUl.append(welHtml);
@@ -99,6 +121,9 @@ jindo.m.PhotoViewer = jindo.$Class({
 			htThumbOption = this.option('htThumbOption'),
 			nLastTouch = 0, nLastLeft = 0;
 
+		this._fillEmptyThumbs();
+		this._resizeThumb();			
+
 		htThumbOption.nHeight = htThumbSize.nHeight;
 		this._woThumb = new jindo.m.Scroll(this._welThumb, htThumbOption)
 			.attach({
@@ -110,9 +135,11 @@ jindo.m.PhotoViewer = jindo.$Class({
 						var nIndex = self._getLeftIndexBy(nThisLeft);
 						self._loadThumbFrom(nIndex);
 					}
+					self.fireEvent('ThumbAfterScroll', woEvent);
 				},
 				'touchStart' : function(woEvent){
 					nLastTouch = woEvent.nLeft;
+					self.fireEvent('ThumbTouchStart', woEvent);
 				},
 				'touchEnd' : function(woEvent){
 					if(nLastTouch === woEvent.nLeft && woEvent.oEvent.element.tagName === 'IMG'){
@@ -120,33 +147,68 @@ jindo.m.PhotoViewer = jindo.$Class({
 						self._selectThumb(nSelectedIndex);
 						self._selectPhoto(nSelectedIndex);
 					}
+					self.fireEvent('ThumbTouchEnd', woEvent);
 				}
-			});		
+			});	
+
+		this._loadThumbFrom(this.option('nStartIndex'));
 	},
 
 	_resizeThumb : function(){
 		var htThumbSize = this.option('htThumbSize'),
-			nWidth = this.option('nMaxThumbCount') * htThumbSize.nWidth
+			nWidth = this.option('nMaxImageCount') * htThumbSize.nWidth
 		this._welThumbContainer.width(nWidth);
 	},
 
 	_loadThumbFrom : function(nIndex){
 		var self = this,
 			aNoDataIndex = this._getNoDataIndexFrom(nIndex);
+
+		if(aNoDataIndex.length > 0){
+			if (!this._woAjax) {	
+				this._woAjax = new jindo.$Ajax(this.option("sAjaxUrl"), {
+					timeout : 3,								
+					type : 'jsonp',
+					callbackname : 'callback',	
+					method : 'get',
+					onload : function(res) {					
+						var htData = res.json();					
+						self._fillThumbData(htData);
+					},			
+					ontimeout : function() {},
+					onerror : function() {}
+				});	
+			}
+			if(this._woAjax){
+				this._woAjax.abort();
+				var htParam = this.option('htAjaxParam');
+				htParam.sNoDataIndex = aNoDataIndex.join(',');
+				this._woAjax.request(htParam);	
+				this._changeThumbToLoadingImage(aNoDataIndex);
+			}
+		}			
+	},
+
+	_changeThumbToLoadingImage : function(aNoDataIndex){
+		for(var i=0, nLen=aNoDataIndex.length; i<nLen; i++){
+			var nIndex = aNoDataIndex[i];
+			var welLi = this._welThumb.query('li:nth-child('+nIndex+')');
+			welLi.html(this._woThumbLoadingTemplate.process());
+		}		
 	},
 
 	_getNoDataIndexFrom : function(nIndex){
-		var nPreLoadDataLeft = (this.option('nPreLoadDataLeft') >= this.option('nMaxThumbCount')) ? this.option('nMaxThumbCount') : this.option('nPreLoadDataLeft'),
+		var nPreLoadDataLeft = (this.option('nPreLoadDataLeftRight') >= this.option('nMaxImageCount')) ? this.option('nMaxImageCount') : this.option('nPreLoadDataLeftRight'),
 			nStartIndex = nIndex - nPreLoadDataLeft,
-			nEndIndex = nStartIndex + this.option('nPreLoadDataRight'),
+			nEndIndex = nStartIndex + this._getViewedThumbCount() + this.option('nPreLoadDataLeftRight'),
 			aNoDataIndex = [],
 			nThisIndex = nStartIndex,
 			htData = this.option('htData');
 
 		for(var i=nStartIndex; i<=nEndIndex; i++, nThisIndex++){
 			if(nThisIndex < 1){
-				nThisIndex = this.option('nMaxThumbCount') + nThisIndex;
-			}else if(nThisIndex > this.option('nMaxThumbCount')){
+				nThisIndex = this.option('nMaxImageCount') + nThisIndex;
+			}else if(nThisIndex > this.option('nMaxImageCount')){
 				nThisIndex = 1;
 			}
 			if(!htData[nThisIndex]){
@@ -156,25 +218,228 @@ jindo.m.PhotoViewer = jindo.$Class({
 		return aNoDataIndex;
 	},
 
+	_getViewedThumbCount : function(){
+		var htThumbSize = this.option('htThumbSize'),
+			nCount = Math.ceil(this._welThumb.width() / htThumbSize.nWidth);
+		return nCount;
+	},
+
 	_getLeftIndexBy : function(nLeft){
 		var htThumbSize = this.option('htThumbSize');
-		return Math.floor(nLeft / htThumbSize.nWidth);
+		return Math.floor(nLeft / htThumbSize.nWidth) + 1;
 	},
 
 	_selectThumb : function(nIndex){
-
+		var welOldOn = this._welThumbContainer.query('.on');
+		if(welOldOn) { welOldOn.removeClass('on'); }
+		var welNewOn = this._welThumbContainer.query('li:nth-child('+(nIndex)+')');
+		if(welNewOn) { welNewOn.addClass('on'); }
+		this._loadThumbFrom(nIndex);
+		this._setCurrentPage(nIndex);
+		this._adjustThumbPosition(nIndex);
 	},
+
+	_setCurrentPage : function(nPage){
+		this._welCurrentPage.text(nPage);
+	},
+
+	_adjustThumbPosition : function(nIndex){
+		var nLeftOfScroll = Math.abs(this._woThumb.getCurrentPos().nLeft),
+			nTotalWidth = this._welThumb.width(),
+			htThumbSize = this.option('htThumbSize'),
+			nRightOfScroll = nTotalWidth + Math.floor(nLeftOfScroll) - htThumbSize.nWidth,
+			nLeftOfIndex = (nIndex-1) * htThumbSize.nWidth;
+
+		if(nLeftOfScroll > nLeftOfIndex){
+			this._woThumb.scrollTo(nLeftOfIndex, 0, 100);
+		}else if(nRightOfScroll < nLeftOfIndex){
+			this._woThumb.scrollTo(nLeftOfIndex - nTotalWidth + htThumbSize.nWidth, 0, 100);
+		}
+	},	
+
+	_fillThumbData : function(htNewData){
+		htNewData = htNewData || {};
+		var htData = this.option('htData'),
+			//nPrevIndex = parseInt(this._woFlicking.getContentIndex(), 10);
+			nPrevIndex = 0;
+			if(nPrevIndex < 1) nPrevIndex = this.option('nMaxImageCount');
+		for(var sKey in htNewData){
+			htData[sKey] = htNewData[sKey];
+			var welLi = this._welThumb.query('li:nth-child('+sKey+')');
+			welLi.html(this._woThumbTemplate.process(htData[sKey])).removeClass('empty');
+			
+			// change prev img if not exists
+			if(nPrevIndex ==  sKey){
+				//this._changePhoto(this._woFlicking.getPrevElement(), sKey);
+			}
+		}
+	},	
 
 	_initPhoto : function(){
+		var self = this,
+			htPhotoOption = this.option('htPhotoOption');
 
+		this._fillPhoto();
+		this._resizeAllPhoto();
+
+		var bUseCss3d = jindo.m._isUseCss3d();
+		if(bUseCss3d && (jindo.m.getDeviceInfo().galaxyNote || jindo.m.getDeviceInfo().galaxyS3 || (navigator.userAgent.indexOf("LG-") > -1))) {
+			bUseCss3d = false;
+		}
+
+		htPhotoOption.nTotalContents = this.option('nMaxImageCount'),
+		htPhotoOption.bUseCss3d = bUseCss3d;
+				
+		this._woFlicking = new jindo.m.Flicking(this._welPhoto, htPhotoOption)
+			.attach({
+				'afterFlicking' : function(oCustomEvt){
+					if(self.option('nMaxImageCount') > 2){
+						if(oCustomEvt.bLeft){
+							self._changePhoto(this.getNextElement(), this.getNextIndex() + 1);
+						}else{
+							self._changePhoto(this.getPrevElement(), this.getPrevIndex() + 1);
+						}
+					}else if(self.option('nMaxImageCount') == 2){
+						if(oCustomEvt.nContentsIndex == 0) {
+							self._changePhoto(this.getPrevElement(), 2);
+							self._changePhoto(this.getNextElement(), 2);
+						} else {
+							self._changePhoto(this.getPrevElement(), 1);
+							self._changePhoto(this.getNextElement(), 1);
+						}
+					}	
+					self._nLastPhotoIndex = parseInt(this.getContentIndex(), 10) + 1;
+					self._selectThumb(self._nLastPhotoIndex);
+					//self._changeDescAndLink(self._nLastPhotoIndex);
+					self.fireEvent('PhotoAfterFlicking', oCustomEvt);
+				},
+				'move' : function(oCustomEvt){
+					var welCenter = this.getElement();
+					var welNext = this.getNextElement();
+					var welPrev = this.getPrevElement();
+					
+					self._changePhoto(welCenter, this.getContentIndex()+1);
+					self._changePhoto(welNext, this.getNextIndex()+1);
+					self._changePhoto(welPrev, this.getPrevIndex()+1);
+
+					self._nLastPhotoIndex = this.getContentIndex() + 1;
+					self._selectThumb(self._nLastPhotoIndex);
+					//self._changeDescAndLink(self._nLastPhotoIndex);
+					
+					if(true === self._bIsMoveForInit){
+						self._bIsMoveForInit = false;
+						return;
+					}
+					self.fireEvent('PhotoMove', oCustomEvt);
+				},
+				'rotate' : function(oCustomEvt){
+					self._adjustThumbPosition(self._nLastPhotoIndex);
+					self.fireEvent('PhotoRotate', oCustomEvt);
+				}
+			});
 	},
+
+	_fillPhoto : function(){
+		var nStartIndex = this.option('nStartIndex') || 1,
+			nNextIndex = this._getNextIndexBy(nStartIndex),
+			nPrevIndex = this._getPrevIndexBy(nStartIndex),
+			htData = this.option('htData');
+
+		if(htData[nStartIndex]){
+			this._welPhotoContainer.query('.flick-ct:nth-child(1)').html(this._woPhotoTemplate.process(htData[nStartIndex]));
+		}
+		if(htData[nNextIndex]){
+			this._welPhotoContainer.query('.flick-ct:nth-child(2)').html(this._woPhotoTemplate.process(htData[nNextIndex]));
+		}
+		if(htData[nPrevIndex]){
+			this._welPhotoContainer.query('.flick-ct:nth-child(3)').html(this._woPhotoTemplate.process(htData[nPrevIndex]));
+		}
+	},
+
+	_getPrevIndexBy : function(nCurrentIndex){
+		var nPrevIndex = nCurrentIndex - 1;
+		if(nPrevIndex < 1) nPrevIndex = this.option('nMaxImageCount');
+		return nPrevIndex;
+	},
+
+	_getNextIndexBy : function(nCurrentIndex){
+		var nNextIndex = nCurrentIndex + 1;
+		if(nNextIndex > this.option('nMaxImageCount')) nNextIndex = 1;		
+		return nNextIndex;
+	},
+
+	_resizeAllPhoto : function(){
+		var welCurrentImg = this._welPhotoContainer.query('.flick-ct:nth-child(1)').query('img'),
+			welNextImg = this._welPhotoContainer.query('.flick-ct:nth-child(2)').query('img'),
+			welPrevImg = this._welPhotoContainer.query('.flick-ct:nth-child(3)').query('img');
+
+		if(welCurrentImg) this._resizePhoto(welCurrentImg);
+		if(welNextImg) this._resizePhoto(welNextImg);
+		if(welPrevImg) this._resizePhoto(welPrevImg);
+	},	
+
+	_resizePhoto : function(welImg){
+		var htDiff = this._getDiffPhotoSizeFromWindow();
+		if(htDiff.nWidth < htDiff.nHeight){
+			this._resizePhotoForWidth(welImg);
+		}else{
+			this._resizePhotoForHeight(welImg);
+		}
+	},
+
+	_getDiffPhotoSizeFromWindow : function(){
+		var htWindowSize = this._getWindowSize(),
+			htPhotoSize = this.option('htPhotoSize'),
+			nHeightDiffThanWindow = htWindowSize.height - htPhotoSize.nHeight,
+			nWidthDiffThanWindow = htWindowSize.width - htPhotoSize.nWidth,
+			htDiffThanWindow = {
+				"nHeight" : nHeightDiffThanWindow,
+				"nWidth" : nWidthDiffThanWindow
+			};
+
+		return htDiffThanWindow;
+	},
+
+	_resizePhotoForWidth : function(welImg){
+		var htWindowSize = this._getWindowSize();
+
+		welImg.css('height', 'auto');
+		welImg.width(htWindowSize.width);
+	},
+
+	_resizePhotoForHeight : function(welImg){
+		var htWindowSize = this._getWindowSize();
+
+		welImg.css('width', 'auto');
+		welImg.height(htWindowSize.height);
+	},	
+
+	_getWindowSize : function(){
+		return jindo.$Document().clientSize();
+	},	
 
 	_selectPhoto : function(nIndex){
-
+		this._woFlicking.moveTo(nIndex-1);
 	},
 
-	_initEvents : function(){
+	_changePhoto : function(welLi, nIndex){
+		var htData = this.option('htData');
+		welLi.html(this._woPhotoTemplate.process(htData[nIndex] || {}));
+		jindo.$Fn(function(we){
+			var welTrigger = jindo.$Element(we.element);
+			this._resizePhoto(welTrigger);
+		}, this).attach(welLi.query("img"), "load");
+	},	
 
-	}
+	_initEvents : function(){
+		jindo.$Fn(this._resizeWindow, this).attach(window, 'resize');
+	},
+
+	_resizeWindow : function(oCustomEvt){
+		if(this._woThumb && this._woFlikcing){
+			this._adjustThumbPosition(this._nLastPhotoIndex);
+		}
+		this._resizeAllPhoto();
+	},	
 
 }).extend(jindo.m.UIComponent);
