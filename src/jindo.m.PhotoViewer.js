@@ -4,8 +4,8 @@
  * @names jindo.m
  * @namespace
  * @author Denny Lim<iamdenny@nhn.com>
- * @version 0.0.1
- * @since February 17, 2013
+ * @version 1.0.0
+ * @since February 18, 2013
  * @extends jindo.UIComponent
  * @uses jindo.m.Scroll
  * @uses jindo.m.Flicking

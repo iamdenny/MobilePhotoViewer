@@ -176,3 +176,5 @@ There are many kind of methodologies out there such as TDD, BDD, XP, SCRUM and e
 * It's a lot simpler to have a discussion based on something written down. It's easy to talk endlessly and in circles about a problem if nothing is ever put to text. The simple act of writing down a proposed solution means everyone has a concrete idea that can be argued about and iterated upon.
 
 If you want to read RDD more [visit it](http://goo.gl/QfV9R)
+
+License : [LGPV v2](http://www.gnu.org/licenses/lgpl-2.1.html)
