@@ -39,7 +39,7 @@ MPV(Mobile Photo Viewer) send 'sNoDataIndex' parameter to the server to get json
 ```
 http://example/index.nhn?sNoDataIndex=55,56,57,1,2,3,4,5,6,7
 ```
-The indexed are not consecutive numbers. It's depend on user's control. Think about thumbail scrolling. It's not load all the images. This smart MPV will load what user want to see.
+The indexes are not consecutive numbers. It's depend on user's control. Think about thumbail scrolling. It's not load all the images. This smart MPV will load what user want to see.
 
 ## How to use
 
