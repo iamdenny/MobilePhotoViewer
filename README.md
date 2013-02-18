@@ -4,7 +4,7 @@ It's photo viewer for mobile like smart phone. It has scrolled thumbnail and laz
 Gracias.
 
 ## Preview
-[![Preview001](https://raw.github.com/iamdenny/MobilePhotoViewer/master/examples/preview001.jpg)]
+[![Preview001](https://raw.github.com/iamdenny/MobilePhotoViewer/master/examples/preview001.jpg)](http://mpv.iamdenny.com/examples/example001.html)
 
 ## Dependencies
 
