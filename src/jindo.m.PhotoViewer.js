@@ -28,7 +28,7 @@ jindo.m.PhotoViewer = jindo.$Class({
 			nPreLoadDataLeftRight : 5,
 			htPhotoSize : { nWidth : 0, nHeight : 0 },
 			sAjaxUrl : '',
-			htAjaxParam : '',
+			htAjaxParam : {},
 			htData : {},
 			nStartIndex : 1,
 			sEmptyTemplate : '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH/C1hNUCBEYXRhWE1QPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS4wLWMwNjEgNjQuMTQwOTQ5LCAyMDEwLzEyLzA3LTEwOjU3OjAxICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIiB4bWxuczpzdFJlZj0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlUmVmIyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1LjEgTWFjaW50b3NoIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjI3NTM5NkVENjBBQjExRTJCRkI1OEY5MkIzMEJDRkZFIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjI3NTM5NkVFNjBBQjExRTJCRkI1OEY5MkIzMEJDRkZFIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6Mjc1Mzk2RUI2MEFCMTFFMkJGQjU4RjkyQjMwQkNGRkUiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6Mjc1Mzk2RUM2MEFCMTFFMkJGQjU4RjkyQjMwQkNGRkUiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz4B//79/Pv6+fj39vX08/Lx8O/u7ezr6uno5+bl5OPi4eDf3t3c29rZ2NfW1dTT0tHQz87NzMvKycjHxsXEw8LBwL++vby7urm4t7a1tLOysbCvrq2sq6qpqKempaSjoqGgn56dnJuamZiXlpWUk5KRkI+OjYyLiomIh4aFhIOCgYB/fn18e3p5eHd2dXRzcnFwb25tbGtqaWhnZmVkY2JhYF9eXVxbWllYV1ZVVFNSUVBPTk1MS0pJSEdGRURDQkFAPz49PDs6OTg3NjU0MzIxMC8uLSwrKikoJyYlJCMiISAfHh0cGxoZGBcWFRQTEhEQDw4NDAsKCQgHBgUEAwIBAAAh+QQBAAAAACwAAAAAAQABAAACAkQBADs=" alt="" width="{=nWidth}" height="{=nHeight}">',
@@ -43,8 +43,7 @@ jindo.m.PhotoViewer = jindo.$Class({
 			    bUseMomentum : true,
 			    bUseScrollbar : false,
 			    bAutoResize : true,
-			    nDeceleration : 0.0005,
-			    nHeight : 10 			
+			    nDeceleration : 0.0005
 			},
 			htPhotoOption : {
 				bHorizontal : true,
@@ -162,11 +161,12 @@ jindo.m.PhotoViewer = jindo.$Class({
 
 	_loadThumbFrom : function(nIndex){
 		var self = this,
-			aNoDataIndex = this._getNoDataIndexFrom(nIndex);
+			aNoDataIndex = this._getNoDataIndexFrom(nIndex),
+			sAjaxUrl = this.option("sAjaxUrl");
 
-		if(aNoDataIndex.length > 0){
+		if(sAjaxUrl && aNoDataIndex.length > 0){
 			if (!this._woAjax) {	
-				this._woAjax = new jindo.$Ajax(this.option("sAjaxUrl"), {
+				this._woAjax = new jindo.$Ajax(sAjaxUrl, {
 					timeout : 3,								
 					type : 'jsonp',
 					callbackname : 'callback',	
@@ -272,6 +272,10 @@ jindo.m.PhotoViewer = jindo.$Class({
 			if(nPrevIndex ==  sKey){
 				//this._changePhoto(this._woFlicking.getPrevElement(), sKey);
 			}
+		}
+		if(this._welPhotoContainer.query('.flick-ct:nth-child(1)').html() == ''){
+			this._fillPhoto();
+			this._resizeAllPhoto();
 		}
 	},	
 
