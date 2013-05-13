@@ -181,3 +181,4 @@ There are many kind of methodologies out there such as TDD, BDD, XP, SCRUM and e
 If you want to read RDD more [visit it](http://goo.gl/QfV9R)
 
 License : [LGPV v2](http://www.gnu.org/licenses/lgpl-2.1.html)
+Copyright 2013 NHN Corp.
